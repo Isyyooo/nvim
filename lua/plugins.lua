@@ -74,6 +74,18 @@ return require('packer').startup(function(use)
     end
   }
 
+  -- Completion
+  use {
+    'hrsh7th/nvim-cmp',
+    requires = {
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline'
+    },
+    config = function()
+      require('conf.cmp').setup()
+    end
+  }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
