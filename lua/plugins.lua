@@ -30,6 +30,7 @@ local packer_bootstrap = ensure_packer()
 
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
+  use 'yianwillis/vimcdoc'
 
   -- Beter icon
   use {
@@ -89,11 +90,31 @@ return require('packer').startup(function(use)
     requires = {
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
-      'hrsh7th/cmp-cmdline'
+      'hrsh7th/cmp-cmdline',
+      'hrsh7th/cmp-nvim-lsp'
     },
     config = function()
       require('conf.cmp').setup()
     end
+  }
+
+-- LSP
+    use {
+      "neovim/nvim-lspconfig",
+      wants = {
+        "mason.nvim",
+        "mason-lspconfig.nvim",
+        "mason-tool-installer.nvim",
+        "cmp-nvim-lsp"
+      },
+      config = function()
+        require("conf.lsp").setup()
+      end,
+      requires = {
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+        "WhoIsSethDaniel/mason-tool-installer.nvim",
+    }
   }
 
   -- Automatically set up your configuration after cloning packer.nvim

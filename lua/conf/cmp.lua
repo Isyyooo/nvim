@@ -64,6 +64,7 @@ function M.setup()
         -- Kind icons
         vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
         vim_item.menu = ({
+          nvim_lsp = "[LSP]",
           buffer = "[Buffer]",
           path = "[Path]",
         })[entry.source.name]
@@ -71,6 +72,7 @@ function M.setup()
       end,
     },
     sources = cmp.config.sources({
+      { name = "nvim_lsp" },
       { name = "buffer" },
       { name = "path" },
     })
@@ -93,6 +95,7 @@ function M.setup()
       { name = 'cmdline' }
     })
   })
+
 end
 return M
 
