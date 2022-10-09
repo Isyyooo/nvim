@@ -21,8 +21,8 @@ require('packer').init(conf)
 
 vim.cmd([[
   augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
+  autocmd!
+  autocmd BufWritePost plugins.lua source <afile> | PackerSync
   augroup end
 ]])
 
@@ -98,25 +98,36 @@ return require('packer').startup(function(use)
     end
   }
 
--- LSP
-    use {
-      "neovim/nvim-lspconfig",
-      wants = {
-        "mason.nvim",
-        "mason-lspconfig.nvim",
-        "mason-tool-installer.nvim",
-        "cmp-nvim-lsp"
-      },
-      config = function()
-        require("conf.lsp").setup()
-      end,
-      requires = {
-        "williamboman/mason.nvim",
-        "williamboman/mason-lspconfig.nvim",
-        "WhoIsSethDaniel/mason-tool-installer.nvim",
+  -- LSP
+  use {
+    "neovim/nvim-lspconfig",
+    wants = {
+      "mason.nvim",
+      "mason-lspconfig.nvim",
+      "mason-tool-installer.nvim",
+      "cmp-nvim-lsp"
+    },
+    config = function()
+      require("conf.lsp").setup()
+    end,
+    requires = {
+      "williamboman/mason.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
     }
   }
 
+  -- Nvim tree
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    tag = 'nightly',
+    config = function()
+      require("conf.nvimtree").setup()
+    end
+  }
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then

@@ -12,6 +12,9 @@ function M.setup()
       enable = true
     },
 
+    indent = {
+      enable = true
+    }
 
   }
 end
