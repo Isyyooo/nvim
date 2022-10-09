@@ -42,14 +42,9 @@ return require('packer').startup(function(use)
 
   -- Color
   use {
-    "olimorris/onedarkpro.nvim",
+    'folke/tokyonight.nvim',
     config = function()
-      require('onedarkpro').setup({
-        options = {
-          transparency = true
-        }
-      })
-      vim.cmd("colorscheme onedarkpro")
+      vim.cmd("colorscheme tokyonight")
     end
   }
 
@@ -84,6 +79,15 @@ return require('packer').startup(function(use)
     end
   }
 
+  -- IndentLine
+  use {
+    "lukas-reineke/indent-blankline.nvim",
+    event = "BufReadPre",
+    config = function()
+      require("conf.indentblankline").setup()
+    end,
+  }
+
   -- Completion
   use {
     'hrsh7th/nvim-cmp',
@@ -91,7 +95,15 @@ return require('packer').startup(function(use)
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
-      'hrsh7th/cmp-nvim-lsp'
+      'hrsh7th/cmp-nvim-lsp',
+      'saadparwaiz1/cmp_luasnip',
+      {
+        'L3MON4D3/LuaSnip',
+        config = function()
+          require('conf.luasnip').setup()
+        end
+      },
+      'rafamadriz/friendly-snippets',
     },
     config = function()
       require('conf.cmp').setup()

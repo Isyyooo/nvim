@@ -28,7 +28,7 @@ local opts = {
 }
 
 -- Setup LSP handlers
--- require("config.lsp.handlers").setup()
+require("conf.lsp.handlers").setup()
 
 function M.setup()
   -- Installer
