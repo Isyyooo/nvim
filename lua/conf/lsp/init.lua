@@ -2,7 +2,8 @@ local M = {}
 
 local servers = {
   "sumneko_lua",
-  "clangd"
+  "clangd",
+  "omnisharp_mono"
 }
 
 function M.on_attach(client, bufnr)
@@ -17,7 +18,7 @@ function M.on_attach(client, bufnr)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-M.capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities) -- for nvim-cmp
+M.capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities) -- for nvim-cmp
 
 local opts = {
   on_attach = M.on_attach,

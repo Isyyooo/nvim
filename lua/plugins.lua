@@ -9,6 +9,8 @@ local ensure_packer = function()
   return false
 end
 
+local packer_bootstrap = ensure_packer()
+
 -- packer.nvim configuration
 local conf = {
   display = {
@@ -26,8 +28,6 @@ vim.cmd([[
   augroup end
 ]])
 
-local packer_bootstrap = ensure_packer()
-
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   use 'yianwillis/vimcdoc'
@@ -39,6 +39,14 @@ return require('packer').startup(function(use)
       require('nvim-web-devicons').setup { default = true }
     end
   }
+
+      -- WhichKey
+    use {
+      "folke/which-key.nvim",
+      config = function()
+        require("conf.whichkey").setup()
+      end,
+    }
 
   -- Color
   use {
@@ -70,6 +78,13 @@ return require('packer').startup(function(use)
     end
   }
 
+  use {
+    'ahmedkhalf/project.nvim',
+    config = function ()
+      require('conf.project').setup()
+    end
+  }
+
   -- Treesitter
   use {
     'nvim-treesitter/nvim-treesitter',
@@ -90,7 +105,7 @@ return require('packer').startup(function(use)
 
   -- Completion
   use {
-    'hrsh7th/nvim-cmp',
+  'hrsh7th/nvim-cmp',
     requires = {
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
@@ -125,7 +140,7 @@ return require('packer').startup(function(use)
     requires = {
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "WhoIsSethDaniel/mason-tool-installer.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim"
     }
   }
 
