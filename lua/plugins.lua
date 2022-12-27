@@ -144,6 +144,14 @@ return require('packer').startup(function(use)
     }
   }
 
+  -- Colorizer
+  use {
+    'NvChad/nvim-colorizer.lua',
+    config = function()
+      require("colorizer").setup()
+    end
+  }
+
   -- Nvim tree
   use {
     'nvim-tree/nvim-tree.lua',
