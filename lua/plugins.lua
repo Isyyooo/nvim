@@ -85,6 +85,15 @@ return require('packer').startup(function(use)
     end
   }
 
+  -- Markdown preview
+  use {
+    'toppair/peek.nvim',
+    run = 'deno task --quiet build:fast',
+    config = function()
+      require('conf.peek').setup()
+    end
+  }
+
   -- Treesitter
   use {
     'nvim-treesitter/nvim-treesitter',
