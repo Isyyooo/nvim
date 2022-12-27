@@ -20,6 +20,7 @@ nvimtree.setup{
     group_empty = true,
   },
   filters = {
+    custom = { "*.meta" },
     dotfiles = true,
   },
 }
