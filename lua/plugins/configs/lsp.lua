@@ -2,7 +2,8 @@ local servers = {
   "lua_ls",
   "pyright",
   "jsonls",
-  "omnisharp",
+  "clangd",
+  "cssls"
 }
 
 local M = {}

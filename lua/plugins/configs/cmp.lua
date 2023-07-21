@@ -3,39 +3,11 @@ local has_words_before = function()
   return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
 end
 
-local kind_icons = {
-  Text = "󰉿",
-  Method = "󰆧",
-  Function = "󰊕",
-  Constructor = "",
-  Field = " ",
-  Variable = "󰀫",
-  Class = "󰠱",
-  Interface = "",
-  Module = "",
-  Property = "󰜢",
-  Unit = "󰑭",
-  Value = "󰎠",
-  Enum = "",
-  Keyword = "󰌋",
-  Snippet = "",
-  Color = "󰏘",
-  File = "󰈙",
-  Reference = "",
-  Folder = "󰉋",
-  EnumMember = "",
-  Constant = "󰏿",
-  Struct = "",
-  Event = "",
-  Operator = "󰆕",
-  TypeParameter = " ",
-  Misc = " ",
-}
--- find more here: https://www.nerdfonts.com/cheat-sheet
-
 local M = {}
+
 M.config = {
   "hrsh7th/nvim-cmp",
+  event = { "InsertEnter", "CmdlineEnter" },
   after = "SirVer/ultisnips",
   dependencies = {
     "hrsh7th/cmp-buffer",
@@ -78,11 +50,13 @@ M.configfunc = function()
     },
     window = {
       completion = {
-        -- winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
-        col_offset = -3,
-        side_padding = 0,
+        border = mo.styles.border,
+        winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
       },
-      documentation = cmp.config.window.bordered(),
+      documentation = {
+        border = mo.styles.border,
+        winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:Visual,Search:None",
+      },
     },
     formatting = {
       fields = { "kind", "abbr", "menu" },
@@ -90,13 +64,14 @@ M.configfunc = function()
       maxheight = 10,
       format = function(entry, vim_item)
         -- Kind icons
-        vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+        vim_item.kind = string.format("%s %s", I.lsp.kinds[vim_item.kind:lower()], vim_item.kind)
         vim_item.menu = ({
-          nvim_lsp = "[LSP]",
           ultisnips = "[Snippet]",
-          buffer = "[Buffer]",
+          nvim_lsp = "[LSP]",
+          buffer = "[Buf]",
           path = "[Path]",
-        })[entry.source.name]
+          cmd = "[Cmd]"
+        })[entry.source.name] or entry.source.name
         return vim_item
       end,
     },

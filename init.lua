@@ -1,4 +1,7 @@
+require("core.styles")
+
 require("core.options")
+require("core.keymaps")
 
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 
@@ -9,4 +12,5 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 require "plugins"
+
 

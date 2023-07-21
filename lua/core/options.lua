@@ -1,3 +1,4 @@
+local icons = mo.styles.icons
 local options = {
   backup = false,                          -- creates a backup file
   clipboard = "unnamedplus",               -- allows neovim to access the system clipboard
@@ -22,6 +23,7 @@ local options = {
   shiftwidth = 2,                          -- the number of spaces inserted for each indentation
   tabstop = 2,                             -- insert 2 spaces for a tab
   cursorline = true,                       -- highlight the current line
+  cursorlineopt = mo.styles.transparent and "number" or "number,line",
   number = true,                           -- set numbered lines
   relativenumber = true,                   -- set relative numbered lines
   numberwidth = 4,                         -- set number column width to 2 {default 4}
@@ -30,6 +32,14 @@ local options = {
   linebreak = true,                        -- companion to wrap, don't split words
   scrolloff = 8,                           -- minimal number of screen lines to keep above and below the cursor
   sidescrolloff = 8,                       -- minimal number of screen columns either side of cursor if wrap is `false`
+  fillchars = {
+    eob = " ",
+    fold = " ",
+    msgsep = " ",
+    foldsep = " ",
+    foldopen = icons.documents.expanded,
+    foldclose = icons.documents.collapsed,
+  }
 }
 
 for k, v in pairs(options) do
@@ -41,3 +51,11 @@ vim.opt.shortmess:append "c"                           -- don't give |ins-comple
 vim.opt.iskeyword:append "-"                           -- hyphenated words recognized by searches
 
 vim.g.mapleader = " "
+
+-- Highlight on yank
+vim.cmd [[
+  augroup YankHighlight
+    autocmd!
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank()
+  augroup end
+]]
