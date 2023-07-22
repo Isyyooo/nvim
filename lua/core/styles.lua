@@ -1,4 +1,4 @@
-mo = {}
+_G.mo = {}
 mo.styles = {
   transparent = true,
   icons = {

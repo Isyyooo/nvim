@@ -1,8 +1,3 @@
-local has_words_before = function()
-  local col = vim.fn.col "." - 1
-  return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
-end
-
 local M = {}
 
 M.config = {
@@ -120,8 +115,6 @@ M.configfunc = function()
         i = function(fallback)
           if cmp.visible() then
             cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
-          elseif has_words_before() then
-            cmp.complete()
           else
             fallback()
           end

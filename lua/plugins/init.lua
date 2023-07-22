@@ -9,10 +9,13 @@ require("lazy").setup({
     require("plugins.configs.editor"),
     require("plugins.configs.explorer"),
     require("plugins.configs.lsp").config,
-    require("plugins.configs.cmp").config,
+    require("plugins.configs.completion").config,
     require("plugins.configs.whichkey").config,
+    -- require("plugins.configs.dap"),
+    require("plugins.configs.startup"),
+    require("plugins.configs.finder")
   },
-  defaults = { lazy = true },
+  defaults = { lazy = false },
   install = { colorscheme = { "catppuccin" } },
   change_detection = { notify = false },
   ui = {

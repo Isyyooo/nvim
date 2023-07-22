@@ -15,6 +15,7 @@ M.config = {
     lazy = false,
     dependencies = {
       { "williamboman/mason.nvim", build = ":MasonUpdate", },
+      { "folke/neodev.nvim" }
     },
     config = function()
       require("mason").setup({
@@ -29,6 +30,7 @@ M.config = {
           max_concurrent_installers = 4,
         }
       })
+      require("neodev").setup()
       require("mason-lspconfig").setup({
         ensure_installed = servers,
         automatic_installation = true,
@@ -91,30 +93,30 @@ M.config = {
 }
 
 F.configureKeybinds = function()
-	vim.api.nvim_create_autocmd('LspAttach', {
-		desc = 'LSP actions',
-		callback = function(event)
-			local opts = { buffer = event.buf, noremap = true, nowait = true }
+  vim.api.nvim_create_autocmd('LspAttach', {
+    desc = 'LSP actions',
+    callback = function(event)
+      local opts = { buffer = event.buf, noremap = true, nowait = true }
 
-			vim.keymap.set('n', '<leader>h', vim.lsp.buf.hover, opts)
+      vim.keymap.set('n', '<leader>h', vim.lsp.buf.hover, opts)
       vim.keymap.set('n', 'gl', vim.diagnostic.open_float, opts)
-			vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-			vim.keymap.set('n', 'gD', ':tab sp<CR><cmd>lua vim.lsp.buf.definition()<cr>', opts)
-			vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-			vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
-			vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-			vim.keymap.set('i', '<c-f>', vim.lsp.buf.signature_help, opts)
-			vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-			-- vim.keymap.set({ 'n', 'x' }, '<leader>f', function() vim.lsp.buf.format({ async = true }) end, opts)
-			vim.keymap.set('n', '<leader>aw', vim.lsp.buf.code_action, opts)
-			vim.keymap.set('n', "<leader>,", vim.lsp.buf.code_action, opts)
-			-- vim.keymap.set('x', '<leader>aw', vim.lsp.buf.range_code_action, opts)
-			-- vim.keymap.set('x', "<leader>,", vim.lsp.buf.range_code_action, opts)
-			vim.keymap.set('n', '<leader>t', ':Trouble<cr>', opts)
-			vim.keymap.set('n', '<leader>-', vim.diagnostic.goto_prev, opts)
-			vim.keymap.set('n', '<leader>=', vim.diagnostic.goto_next, opts)
-		end
-	})
+      vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+      vim.keymap.set('n', 'gD', ':tab sp<CR><cmd>lua vim.lsp.buf.definition()<cr>', opts)
+      vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+      vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
+      vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+      vim.keymap.set('i', '<c-f>', vim.lsp.buf.signature_help, opts)
+      vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+      -- vim.keymap.set({ 'n', 'x' }, '<leader>f', function() vim.lsp.buf.format({ async = true }) end, opts)
+      vim.keymap.set('n', '<leader>aw', vim.lsp.buf.code_action, opts)
+      vim.keymap.set('n', "<leader>,", vim.lsp.buf.code_action, opts)
+      -- vim.keymap.set('x', '<leader>aw', vim.lsp.buf.range_code_action, opts)
+      -- vim.keymap.set('x', "<leader>,", vim.lsp.buf.range_code_action, opts)
+      vim.keymap.set('n', '<leader>t', ':Trouble<cr>', opts)
+      vim.keymap.set('n', '<leader>-', vim.diagnostic.goto_prev, opts)
+      vim.keymap.set('n', '<leader>=', vim.diagnostic.goto_next, opts)
+    end
+  })
 end
 
 return M
