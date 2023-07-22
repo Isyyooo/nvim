@@ -118,6 +118,26 @@ require("lazy").setup({
 			})
 		end
 	},
+	{
+	"nvim-treesitter/nvim-treesitter",
+	config = function()
+		require("nvim-treesitter.configs").setup({
+			ensure_installed = { "lua", "vim", "json", "rust"},
+			sync_install = false,
+			auto_install = true,
+			highlight = {
+				enable = true,
+			},
+			incremental_selection = {
+				enable = true,
+				keymaps = {
+					node_incremental = "v",
+					node_decremental = "<BS>",
+				},
+			}
+		})
+	end
+	},
 })
 
 vim.cmd.colorscheme("base16-tender")
