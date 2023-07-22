@@ -36,6 +36,7 @@ if not vim.loop.fs_stat(lazypath) then
 	})
 end
 vim.opt.rtp:prepend(lazypath)
+
 require("lazy").setup({
 	{
 		"RRethy/nvim-base16",
@@ -79,16 +80,56 @@ require("lazy").setup({
 			"L3MON4D3/Luasnip",
 		},
 	},
+	{
+		"folke/neodev.nvim",
+	},
+	{
+		"windwp/nvim-autopairs",
+		event = "VeryLazy",
+		config = function()
+			require("nvim-autopairs").setup()
+		end
+	},
+	{
+		"jose-elias-alvarez/null-ls.nvim",
+		event = "VeryLazy",
+		config = function()
+			local null_ls = require("null-ls")
+
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.formatting.isort,
+					null_ls.builtins.formatting.black,
+				},
+				on_attach = function(client, bufnr)
+					if client.supports_method("textDocument/formatting") then
+						vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+						vim.api.nvim_create_autocmd("BufWritePre", {
+							group = augroup,
+							buffer = bufnr,
+							callback = function()
+								-- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
+								-- on later neovim version, you should use vim.lsp.buf.format({ async = false }) instead
+								vim.lsp.buf.format({ bufnr = bufnr })
+							end,
+						})
+					end
+				end,
+			})
+		end
+	},
 })
 
 vim.cmd.colorscheme("base16-tender")
 
 local lspconfig = require('lspconfig')
+require("neodev").setup()
 require('mason').setup()
 require('mason-lspconfig').setup()
 
 -- Set up lspconfig.
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -166,6 +207,8 @@ end
 
 local luasnip = require 'luasnip'
 local cmp = require 'cmp'
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 cmp.setup({
 	snippet = {
