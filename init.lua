@@ -119,24 +119,30 @@ require("lazy").setup({
 		end
 	},
 	{
-	"nvim-treesitter/nvim-treesitter",
-	config = function()
-		require("nvim-treesitter.configs").setup({
-			ensure_installed = { "lua", "vim", "json", "rust"},
-			sync_install = false,
-			auto_install = true,
-			highlight = {
-				enable = true,
-			},
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					node_incremental = "v",
-					node_decremental = "<BS>",
+		"nvim-treesitter/nvim-treesitter",
+		config = function()
+			require("nvim-treesitter.configs").setup({
+				ensure_installed = { "lua", "vim", "json", "rust" },
+				sync_install = false,
+				auto_install = true,
+				highlight = {
+					enable = true,
 				},
-			}
-		})
-	end
+				incremental_selection = {
+					enable = true,
+					keymaps = {
+						node_incremental = "v",
+						node_decremental = "<BS>",
+					},
+				}
+			})
+		end
+	},
+	{
+		"mfussenegger/nvim-dap",
+	},
+	{
+		"rcarriga/nvim-dap-ui",
 	},
 })
 
@@ -311,3 +317,55 @@ cmp.setup.cmdline(':', {
 		{ name = 'cmdline' }
 	})
 })
+
+
+local dap, dapui = require("dap"), require("dapui")
+dapui.setup()
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
+dap.adapters.python = function(cb, config)
+	if config.request == 'attach' then
+		---@diagnostic disable-next-line: undefined-field
+		local port = (config.connect or config).port
+		---@diagnostic disable-next-line: undefined-field
+		local host = (config.connect or config).host or '127.0.0.1'
+		cb({
+			type = 'server',
+			port = assert(port, '`connect.port` is required for a python `attach` configuration'),
+			host = host,
+			options = {
+				source_filetype = 'python',
+			},
+		})
+	else
+		cb({
+			type = 'executable',
+			command = '/usr/bin/python',
+			args = { '-m', 'debugpy.adapter' },
+			options = {
+				source_filetype = 'python',
+			},
+		})
+	end
+end
+
+dap.configurations.python = {
+	{
+		-- The first three options are required by nvim-dap
+		type = 'python', -- the type here established the link to the adapter definition: `dap.adapters.python`
+		request = 'launch',
+		name = "Launch file",
+		program = "${file}", -- This configuration will launch the current file if used.
+		pythonPath = function()
+			return "/usr/bin/python"
+		end
+	}
+}
