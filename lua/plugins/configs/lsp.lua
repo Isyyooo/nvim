@@ -24,10 +24,16 @@ return {
 			local icons = mo.styles.icons.diagnostics
 			local lspconfig = require("lspconfig")
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
 			for name, icon in pairs(icons) do
 				name = "DiagnosticSign" .. name:gsub("^%l", string.upper)
 				vim.fn.sign_define(name, { text = icon, texthl = name })
 			end
+
+			require("lspconfig.ui.windows").default_options.border = "rounded"
+
+			vim.lsp.handlers["textDocument/hover"] =
+					vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
 
 			vim.diagnostic.config({
 				severity_sort = true,
@@ -66,25 +72,27 @@ return {
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 				callback = function(ev)
-					-- Enable completion triggered by <c-x><c-o>
-					vim.bo[ev.buf].omnifunc = "v:lua.vim.lsp.omnifunc"
-
 					-- Buffer local mappings.
 					-- See `:help vim.lsp.*` for documentation on any of the below functions
+
 					local opts = { buffer = ev.buf }
-					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-					vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-					vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-					vim.keymap.set("n", "<Leader>D", vim.lsp.buf.type_definition, opts)
-					vim.keymap.set("n", "<Leader>rn", vim.lsp.buf.rename, opts)
-					vim.keymap.set({ "n", "v" }, "<Leader>ca", vim.lsp.buf.code_action, opts)
-					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-					vim.keymap.set("n", "<Leader>f", function()
-						vim.lsp.buf.format({ async = true })
-					end, opts)
+					local wk = require("which-key")
+					wk.register({
+						["<Leader>"] = {
+							f = { function() vim.lsp.buf.format({ async = true }) end, "Format file" },
+							h = { vim.lsp.buf.hover, "Type info" },
+							H = { vim.lsp.buf.signature_help, "View doc" },
+						},
+					}, opts)
 				end,
+			})
+
+			vim.api.nvim_create_autocmd("CursorHold", {
+				group = vim.api.nvim_create_augroup("LspDiagnostics", {}),
+				desc = "LSP: show diagnostics",
+				callback = function()
+					vim.diagnostic.open_float({ scope = "cursor", focus = false })
+				end
 			})
 
 			lspconfig.lua_ls.setup({
@@ -126,5 +134,14 @@ return {
 				override = function() end,
 			})
 		end,
+	},
+	{
+		"ray-x/lsp_signature.nvim",
+		event = "BufReadPost",
+		opts = {
+			bind = true,
+			hint_scheme = "Comment",
+			handler_opts = { border = mo.styles.border },
+		},
 	},
 }

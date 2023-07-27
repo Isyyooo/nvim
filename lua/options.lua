@@ -13,6 +13,7 @@ set.softtabstop = 2
 set.scrolloff = 8
 set.sidescrolloff = 8
 set.pumwidth = 10
+set.showmode = false
 
 -- copy after highlight
 vim.api.nvim_create_autocmd({ "TextYankPost" }, {
