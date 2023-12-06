@@ -79,7 +79,6 @@ return {
 					local wk = require("which-key")
 					wk.register({
 						["<Leader>"] = {
-							f = { function() vim.lsp.buf.format({ async = true }) end, "Format file" },
 							h = { vim.lsp.buf.hover, "Type info" },
 							H = { vim.lsp.buf.signature_help, "View doc" },
 						},
@@ -124,8 +123,17 @@ return {
 			lspconfig.clangd.setup({
 				capabilities = capabilities,
 			})
+
+			lspconfig.jdtls.setup({
+				capabilities = capabilities,
+			})
+
+			lspconfig.volar.setup({
+				capabilities = capabilities,
+			})
 		end,
 	},
+	{ "mfussenegger/nvim-jdtls", ft = { "java" }},
 	{
 		"folke/neodev.nvim",
 		config = function()

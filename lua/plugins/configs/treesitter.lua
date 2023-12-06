@@ -1,4 +1,5 @@
 return {
+	{ "windwp/nvim-ts-autotag" },
 	{
 		"nvim-treesitter/nvim-treesitter",
 		config = function()
@@ -8,16 +9,14 @@ return {
 				ignore_install = {},
 				sync_install = false,
 				auto_install = true,
+
 				highlight = {
 					enable = true,
 				},
-				incremental_selection = {
+
+				autotag = {
 					enable = true,
-					keymaps = {
-						node_incremental = "v",
-						node_decremental = "<BS>",
-					},
-				}
+				},
 			})
 		end,
 	}

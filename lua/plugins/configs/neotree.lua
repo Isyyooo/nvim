@@ -62,6 +62,7 @@ return {
 				},
 			},
 			window = {
+				position = "float",
 				width = 30,
 				mappings = {
 					["l"] = "open",
